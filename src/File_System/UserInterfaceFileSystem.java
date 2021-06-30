@@ -30,12 +30,13 @@ public class UserInterfaceFileSystem {
 	,word_count_label,line_count_label,mean_length_label,word_label,line_label,mean_label;
 	private JScrollPane scrollPane;
 	public String filename,filepath,textAreaContent;
+	private JButton showfilebutton;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					User_Interface window = new User_Interface();
+					UserInterfaceFileSystem window = new UserInterfaceFileSystem();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,11 +51,12 @@ public class UserInterfaceFileSystem {
 	}
 
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("File System");
 		frame.setBounds(100, 100, 660, 705);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		//Object creation for classes to get data
 		Read_File readfile = new Read_File();
 		Write_File writefile = new Write_File();
 		Remove_Content_File removecontent = new Remove_Content_File();
@@ -63,7 +65,7 @@ public class UserInterfaceFileSystem {
 		Mean_Word_Length meanwordlength = new Mean_Word_Length();
 
 		
-		
+		//Add action listeners to button
 		select_file = new JButton("Select File");
 		select_file.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -76,6 +78,7 @@ public class UserInterfaceFileSystem {
 				select_file_label.setText(filename);
 		            
 		            try {
+		            	//read file in the Text Area
 		            	FileReader filereader = new FileReader(filepath);
 		            	BufferedReader bufferreader = new BufferedReader(filereader);
 		            	scrollPane.setVisible(true);
@@ -89,8 +92,36 @@ public class UserInterfaceFileSystem {
 		        }
 
 		});
-		select_file.setBounds(488, 165, 115, 31);
+		select_file.setBounds(488, 165, 131, 49);
 		frame.getContentPane().add(select_file);
+		
+		showfilebutton = new JButton("Show File");
+		showfilebutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(filepath!= null) {
+					try {
+		            	FileReader filereader = new FileReader(filepath);
+		            	BufferedReader bufferreader = new BufferedReader(filereader);
+		            	scrollPane.setVisible(true);
+		            	textArea.setVisible(true);
+		            	textArea.read(bufferreader,null);
+		            	bufferreader.close();
+		            	textArea.requestFocus();	            	
+		            }catch(Exception message) {
+	            	JOptionPane.showMessageDialog(null, message);
+		            }
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Please select the file first.", 
+                            "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+		
+		showfilebutton.setBounds(488, 255, 131, 49);
+		frame.getContentPane().add(showfilebutton);
 		
 		
 		word_count = new JButton("Show Statistics");
@@ -98,7 +129,7 @@ public class UserInterfaceFileSystem {
 			public void actionPerformed(ActionEvent e) {
 
 				if(filename==null) {
-					JOptionPane.showMessageDialog(null, "Select the file first", 
+					JOptionPane.showMessageDialog(null, "Please select the file first.", 
                             "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
@@ -126,47 +157,87 @@ public class UserInterfaceFileSystem {
 				}		      
 			}
 		});
-		word_count.setBounds(488, 250, 115, 31);
+		word_count.setBounds(488, 353, 131, 49);
 		frame.getContentPane().add(word_count);
 		
 		write_file = new JButton("Write File");
 		write_file.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textArea.setVisible(true);
-				scrollPane.setVisible(true);
-				textAreaContent = textArea.getText();
-				int success = writefile.fileWriter(filepath, textAreaContent);
-				if(success == 1) {
-					JOptionPane.showMessageDialog(null, "Successfully write to file.", 
-                            "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Writing to file is unsucessfull.", 
+				
+				if(filename==null) {
+					JOptionPane.showMessageDialog(null, "Please select the file first.", 
                             "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
+				else {
+					textArea.setVisible(true);
+					scrollPane.setVisible(true);
+					textAreaContent = textArea.getText();
+					int success = writefile.fileWriter(filepath, textAreaContent);
+					if(success == 1) {
+						JOptionPane.showMessageDialog(null, "Successfully write to file.", 
+	                            "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+						try {
+			            	FileReader filereader = new FileReader(filepath);
+			            	BufferedReader bufferreader = new BufferedReader(filereader);
+			            	scrollPane.setVisible(true);
+			            	textArea.setVisible(true);
+			            	textArea.read(bufferreader,null);
+			            	bufferreader.close();
+			            	textArea.requestFocus();	            	
+			            }catch(Exception message) {
+		            	JOptionPane.showMessageDialog(null, message);
+			            }
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Writing to file is unsucessfull.", 
+	                            "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
 				
 			}
 		});
-		write_file.setBounds(488, 338, 115, 31);
+		write_file.setBounds(488, 445, 131, 49);
 		frame.getContentPane().add(write_file);
 		
 		remove_text = new JButton("Remove Text");
 		remove_text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int remove = removecontent.removeContent(filepath);
-				if(remove==1) {
-					JOptionPane.showMessageDialog(null, "Content Remove Successully.", 
-                            "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Content not removed", 
+				
+				if(filename==null) {
+					JOptionPane.showMessageDialog(null, "Please select the file first.", 
                             "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
+				else {
+					int remove = removecontent.removeContent(filepath);
+					if(remove==1) {
+						JOptionPane.showMessageDialog(null, "Content Remove Successully.", 
+	                            "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+						try {
+			            	FileReader filereader = new FileReader(filepath);
+			            	BufferedReader bufferreader = new BufferedReader(filereader);
+			            	scrollPane.setVisible(true);
+			            	textArea.setVisible(true);
+			            	textArea.read(bufferreader,null);
+			            	bufferreader.close();
+			            	textArea.requestFocus();	            	
+			            }catch(Exception message) {
+		            	JOptionPane.showMessageDialog(null, message);
+			            }
+						
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Content not removed", 
+	                            "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
 			}
 		});
-		remove_text.setBounds(488, 433, 115, 31);
+		remove_text.setBounds(488, 547, 131, 49);
 		frame.getContentPane().add(remove_text);
 		
+		//Label 
 		lblReadingFile = new JLabel("READING FILE SYSTEM");
 		lblReadingFile.setFont(new Font("Calibri", Font.BOLD, 25));
 		lblReadingFile.setBounds(143, 41, 297, 49);
@@ -234,6 +305,8 @@ public class UserInterfaceFileSystem {
 		mean_label.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		mean_label.setBounds(43, 364, 163, 23);
 		frame.getContentPane().add(mean_label);
+		
+		
 	
 		
 	}

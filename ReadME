@@ -1,0 +1,23 @@
+
+Simple java program which is used to read file with user selected files. 
+
+Open project in the Eclipse platform.
+Add window builder plugin for user interface.
+Add JUnit Plugin for unit test run correctly.
+
+About Program:
+Select file from computer.
+Read it in the Text Area.
+Show statistics using show statistic button.
+User can write in the file.
+User also remove the content of the file by using Remove Content.
+
+About Unit Test
+replace 	  String path = "C:\\Users\\faria\\Desktop\\testone.txt";
+path must be according to your PC path.
+
+NOTE:
+Do not create temporary folder because it is a bug which is not deleting the existing files. 
+Failed to delete temp directory: https://github.com/spring-io/initializr/issues/862 (could be potential junit bug)
+
+Output screen is present in the image folder.

@@ -7,22 +7,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Read_File {
 
+	//Read File from the user selection
 	protected Map<String, String> getFileData() {
 
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser choosefile = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Text Files", "txt");
         
-        chooser.setFileFilter(filter);
+        choosefile.setFileFilter(filter);
         
-        int returnVal = chooser.showOpenDialog(null);
-        String filename = chooser.getSelectedFile().getName();
-        String filepath = chooser.getSelectedFile().getAbsolutePath();
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-        	
-            System.out.println("You chose to open this file: " +
-                    chooser.getSelectedFile().getName() +chooser.getSelectedFile().getAbsolutePath());
-        }
+        int returnvalue = choosefile.showOpenDialog(null);
+        String filename = choosefile.getSelectedFile().getName();
+        String filepath = choosefile.getSelectedFile().getAbsolutePath();
+
         Map<String, String> result = new HashMap<>();
         result.put("filename",filename);
         result.put("filepath", filepath);
