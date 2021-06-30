@@ -1,3 +1,4 @@
+package File_System;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -54,14 +55,21 @@ public class User_Interface {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		File_Management_Functionality file = new File_Management_Functionality();
+		Read_File readfile = new Read_File();
+		Write_File writefile = new Write_File();
+		Remove_Content_File removecontent = new Remove_Content_File();
+		Word_Count_File wordcountfile = new Word_Count_File();
+		Line_Count_File linecountfile = new Line_Count_File();
+		Mean_Word_Length meanwordlength = new Mean_Word_Length();
+
+		
 		
 		select_file = new JButton("Select File");
 		select_file.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				Map<String, String> result = new HashMap<>();								
-				result = file.getFileData();
+				result = readfile.getFileData();
 				filename = result.get("filename");
 				filepath = result.get("filepath");
 				
@@ -84,6 +92,7 @@ public class User_Interface {
 		select_file.setBounds(488, 165, 115, 31);
 		frame.getContentPane().add(select_file);
 		
+		
 		word_count = new JButton("Show Statistics");
 		word_count.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -97,14 +106,14 @@ public class User_Interface {
 						textArea.setVisible(false);
 						scrollPane.setVisible(false);
 						
-						int wordcount = file.getWordCount(filename,filepath);
+						int wordcount = wordcountfile.getWordCount(filepath);
 						long linecount = 0;
 						try {
-							linecount = file.countLinesNew(filepath);
+							linecount = linecountfile.countLinesNew(filepath);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
-						double meanWordLength = file.getMeanWordLength(filepath, wordcount);
+						String meanWordLength = meanwordlength.getMeanWordLength(filepath, wordcount);
 					    word_label.setText("Word Count = ");
 					    word_count_label.setText(String.valueOf(wordcount));
 					    
@@ -112,7 +121,7 @@ public class User_Interface {
 					    line_count_label.setText(String.valueOf(linecount));
 					    
 					    mean_label.setText("Mean Word Length = ");
-					    mean_length_label.setText(String.valueOf(meanWordLength));
+					    mean_length_label.setText(meanWordLength);
 					    
 				}		      
 			}
@@ -126,7 +135,7 @@ public class User_Interface {
 				textArea.setVisible(true);
 				scrollPane.setVisible(true);
 				textAreaContent = textArea.getText();
-				int success = file.fileWriter(filepath, textAreaContent);
+				int success = writefile.fileWriter(filepath, textAreaContent);
 				if(success == 1) {
 					JOptionPane.showMessageDialog(null, "Successfully write to file.", 
                             "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
@@ -144,7 +153,7 @@ public class User_Interface {
 		remove_text = new JButton("Remove Text");
 		remove_text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int remove = file.removeContent(filepath);
+				int remove = removecontent.removeContent(filepath);
 				if(remove==1) {
 					JOptionPane.showMessageDialog(null, "Content Remove Successully.", 
                             "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
