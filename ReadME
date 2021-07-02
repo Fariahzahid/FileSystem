@@ -12,8 +12,10 @@ Show statistics using show statistic button.
 User can write in the file.
 User also remove the content of the file by using Remove Content.
 
-About Unit Test
+About Unit Test: Alert Note
 replace 	  String path = "C:\\Users\\faria\\Desktop\\testone.txt";
+change this if possible C:\\Users\\faria\\Desktop\\ text file have any name of your choice.
+For unit testing there must be a temporary file which is used to test the methods in the classes.
 path must be according to your PC path.
 
 NOTE:
